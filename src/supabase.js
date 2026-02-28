@@ -253,6 +253,7 @@ function dbTaskToLocal(db) {
         estimatedHours: db.estimated_hours,
         completed: db.completed,
         scheduled: db.scheduled,
+        repeat: db.repeat || 'none',
     };
 }
 
@@ -266,6 +267,7 @@ function localTaskToDb(local, userId) {
         estimated_hours: local.estimatedHours || 2,
         completed: local.completed || false,
         scheduled: local.scheduled || false,
+        repeat: local.repeat || 'none',
     };
 }
 
