@@ -1927,6 +1927,79 @@ select {
     transform: scale(1.15);
 }
 
+/* ═══════════ Streak Badge ═══════════ */
+
+.streak-badge {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 14px;
+    background: linear-gradient(135deg, rgba(255, 165, 0, 0.12), rgba(255, 69, 0, 0.08));
+    border: 1px solid rgba(255, 140, 0, 0.25);
+    border-radius: var(--radius-full);
+    cursor: default;
+    transition: all 0.2s;
+}
+
+.streak-badge:hover {
+    background: linear-gradient(135deg, rgba(255, 165, 0, 0.18), rgba(255, 69, 0, 0.14));
+    transform: scale(1.03);
+}
+
+.streak-fire {
+    font-size: 1rem;
+    animation: fireFlicker 2s ease infinite;
+}
+
+@keyframes fireFlicker {
+
+    0%,
+    100% {
+        transform: scale(1);
+    }
+
+    50% {
+        transform: scale(1.15) rotate(5deg);
+    }
+}
+
+.streak-count {
+    font-size: 0.9rem;
+    font-weight: 800;
+    color: #ff6b35;
+    font-variant-numeric: tabular-nums;
+}
+
+.streak-dots {
+    display: flex;
+    gap: 3px;
+    align-items: center;
+    margin-left: 4px;
+}
+
+.streak-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: rgba(0, 0, 0, 0.1);
+    transition: all 0.2s;
+}
+
+.streak-dot.active {
+    background: #ff6b35;
+    box-shadow: 0 0 4px rgba(255, 107, 53, 0.4);
+}
+
+.streak-dot.today {
+    width: 7px;
+    height: 7px;
+    border: 1.5px solid #ff6b35;
+}
+
+.streak-dot.today.active {
+    background: #ff6b35;
+}
+
 /* ═══════════ Responsive ═══════════ */
 
 /* Mobile header - hidden on desktop */
@@ -2199,6 +2272,20 @@ select {
     /* Insights */
     .chart-container {
         overflow-x: auto;
+    }
+
+    /* Streak */
+    .streak-badge {
+        padding: 4px 10px;
+    }
+
+    .streak-dots {
+        display: none;
+    }
+
+    .page-header-right {
+        flex-wrap: wrap;
+        justify-content: flex-end;
     }
 
     /* Checkin */

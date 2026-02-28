@@ -89,6 +89,46 @@ export default function TodayView({ blocks, tasks, goals, onStartFocus, onToggle
     const dayNames = ['Chủ nhật', 'Thứ 2', 'Thứ 3', 'Thứ 4', 'Thứ 5', 'Thứ 6', 'Thứ 7'];
     const monthNames = ['Tháng 1', 'Tháng 2', 'Tháng 3', 'Tháng 4', 'Tháng 5', 'Tháng 6', 'Tháng 7', 'Tháng 8', 'Tháng 9', 'Tháng 10', 'Tháng 11', 'Tháng 12'];
 
+    // ── Streak tracking ──
+    const [streak, setStreak] = useState(0);
+
+    useEffect(() => {
+        const todayStr = today.toISOString().slice(0, 10);
+        const stored = JSON.parse(localStorage.getItem('studygrid_streak') || '{"days":[],"count":0}');
+        const days = stored.days || [];
+
+        if (!days.includes(todayStr)) {
+            days.push(todayStr);
+            days.sort();
+            // Keep only last 90 days
+            while (days.length > 90) days.shift();
+        }
+
+        // Calculate consecutive streak ending today
+        let count = 0;
+        let d = new Date(today);
+        while (true) {
+            const ds = d.toISOString().slice(0, 10);
+            if (days.includes(ds)) {
+                count++;
+                d.setDate(d.getDate() - 1);
+            } else {
+                break;
+            }
+        }
+
+        localStorage.setItem('studygrid_streak', JSON.stringify({ days, count }));
+        setStreak(count);
+    }, []);
+
+    // Last 7 days for mini calendar
+    const last7Days = Array.from({ length: 7 }, (_, i) => {
+        const d = new Date(today);
+        d.setDate(d.getDate() - (6 - i));
+        return d;
+    });
+    const streakDays = JSON.parse(localStorage.getItem('studygrid_streak') || '{"days":[]}').days || [];
+
     return (
         <div>
             <div className="page-header">
@@ -96,7 +136,27 @@ export default function TodayView({ blocks, tasks, goals, onStartFocus, onToggle
                     <h2><Sun size={22} strokeWidth={1.8} style={{ marginRight: 8, verticalAlign: -3 }} />Hôm nay</h2>
                     <p>{dayNames[today.getDay()]}, {today.getDate()} {monthNames[today.getMonth()]} {today.getFullYear()}</p>
                 </div>
-                <div className="page-header-right">
+                <div className="page-header-right" style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+                    {/* Streak badge */}
+                    <div className="streak-badge" title={`Streak: ${streak} ngày liên tiếp`}>
+                        <span className="streak-fire">🔥</span>
+                        <span className="streak-count">{streak}</span>
+                        <div className="streak-dots">
+                            {last7Days.map((d, i) => {
+                                const ds = d.toISOString().slice(0, 10);
+                                const isActive = streakDays.includes(ds);
+                                const isToday = ds === today.toISOString().slice(0, 10);
+                                return (
+                                    <span
+                                        key={i}
+                                        className={`streak-dot ${isActive ? 'active' : ''} ${isToday ? 'today' : ''}`}
+                                        title={`${d.getDate()}/${d.getMonth() + 1}`}
+                                    />
+                                );
+                            })}
+                        </div>
+                    </div>
+
                     {todayBlocks.find(b => isCurrentBlock(b)) && (
                         <button className="btn btn-primary" onClick={() => onStartFocus(todayBlocks.find(b => isCurrentBlock(b)))}>
                             <Crosshair size={16} strokeWidth={2} /> Start Focus
