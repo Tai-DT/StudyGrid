@@ -1,0 +1,23 @@
+{
+    "name": "StudyGrid — Time-Block Planner",
+    "short_name": "StudyGrid",
+    "description": "Ứng dụng lên lịch học tập thông minh với AI StudyBot",
+    "start_url": "/",
+    "display": "standalone",
+    "background_color": "#0a0a12",
+    "theme_color": "#6C5CE7",
+    "orientation": "any",
+    "icons": [
+        {
+            "src": "/studygrid-icon.svg",
+            "sizes": "any",
+            "type": "image/svg+xml",
+            "purpose": "any"
+        }
+    ],
+    "categories": [
+        "education",
+        "productivity"
+    ],
+    "lang": "vi"
+}
