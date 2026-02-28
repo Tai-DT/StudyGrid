@@ -1929,6 +1929,67 @@ select {
 
 /* ═══════════ Responsive ═══════════ */
 
+/* Mobile header - hidden on desktop */
+.mobile-header {
+    display: none;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: rgba(255, 255, 255, 0.92);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border-subtle);
+    padding: 10px 16px;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.mobile-menu-btn {
+    background: none;
+    border: none;
+    color: var(--text-primary);
+    padding: 8px;
+    border-radius: var(--radius-md);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.mobile-menu-btn:active {
+    background: rgba(0, 0, 0, 0.06);
+}
+
+.mobile-header-title {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-weight: 800;
+    font-size: 1rem;
+    color: var(--accent);
+}
+
+/* Sidebar overlay - for mobile */
+.sidebar-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.4);
+    backdrop-filter: blur(4px);
+    z-index: 998;
+    animation: fadeIn 0.2s ease;
+}
+
+.sidebar-close-btn {
+    display: none;
+    background: none;
+    border: none;
+    color: var(--text-muted);
+    padding: 6px;
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+    margin-left: auto;
+}
+
 @media (max-width: 1024px) {
     .today-layout {
         grid-template-columns: 1fr;
@@ -1944,42 +2005,272 @@ select {
 }
 
 @media (max-width: 768px) {
+
+    /* Show mobile header */
+    .mobile-header {
+        display: flex;
+    }
+
+    /* Sidebar becomes slide-in drawer */
     .sidebar {
         position: fixed;
-        left: -100%;
+        left: -280px;
+        top: 0;
+        bottom: 0;
         z-index: 999;
-        transition: left var(--transition-normal);
+        width: 260px;
+        transition: left 0.3s cubic-bezier(0.16, 1, 0.3, 1);
     }
 
     .sidebar.open {
         left: 0;
+        box-shadow: 8px 0 30px rgba(0, 0, 0, 0.15);
+    }
+
+    .sidebar-overlay {
+        display: block;
+    }
+
+    .sidebar-close-btn {
+        display: flex;
+    }
+
+    /* Main content takes full width */
+    .app-layout {
+        grid-template-columns: 1fr;
+    }
+
+    .main-content {
+        margin-left: 0;
     }
 
     .page-content {
         padding: 16px;
     }
 
+    /* Page titles */
+    .page-content h2 {
+        font-size: 1.3rem;
+    }
+
+    /* Today view */
+    .today-layout {
+        grid-template-columns: 1fr;
+        gap: 16px;
+    }
+
+    .today-sidebar {
+        display: none;
+    }
+
+    /* Week grid scroll */
+    .week-grid-body {
+        max-height: calc(100vh - 200px);
+        overflow-x: auto;
+    }
+
+    .week-grid-body table {
+        min-width: 600px;
+    }
+
+    /* Tasks */
+    .task-item {
+        flex-wrap: wrap;
+        gap: 8px;
+    }
+
+    /* Goals */
+    .goal-card {
+        padding: 14px;
+    }
+
+    /* Stats */
+    .stats-row {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 10px;
+    }
+
+    .stat-card {
+        padding: 14px;
+    }
+
+    /* Filter bar */
+    .filter-bar {
+        gap: 6px;
+    }
+
+    .filter-chip {
+        padding: 5px 10px;
+        font-size: 0.72rem;
+    }
+
+    /* Onboarding */
     .onboarding {
         flex-direction: column;
     }
 
     .onboarding-left {
         padding: 24px;
-        min-height: 30vh;
+        min-height: 25vh;
     }
 
+    .onboarding-left h1,
     .onboarding-left h2 {
         font-size: 1.5rem;
     }
 
     .onboarding-right {
-        padding: 24px;
+        padding: 20px;
     }
 
-    .week-grid-body {
-        max-height: calc(100vh - 200px);
+    .onboarding-options {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    /* FAB buttons */
+    .fab-btn {
+        bottom: 20px;
+        right: 20px;
+        width: 50px;
+        height: 50px;
+    }
+
+    .focus-music-fab,
+    .focus-music-mini {
+        bottom: 80px;
+        right: 16px;
+    }
+
+    /* Modals */
+    .modal {
+        max-width: 95vw !important;
+        max-height: 90vh !important;
+        margin: auto;
+    }
+
+    .quick-add-modal {
+        width: 95vw;
+    }
+
+    /* Card padding */
+    .card {
+        padding: 14px;
+    }
+
+    /* Settings */
+    .settings-section {
+        padding: 14px;
+    }
+
+    .settings-row {
+        flex-direction: column;
+        gap: 8px;
+        align-items: flex-start;
+    }
+
+    /* Timetable modal */
+    .timetable-modal {
+        max-width: 95vw !important;
+        max-height: 90vh !important;
+    }
+
+    .timetable-import-cards {
+        grid-template-columns: 1fr;
+    }
+
+    .timetable-content {
+        padding: 16px;
+    }
+
+    .timetable-header,
+    .timetable-row {
+        grid-template-columns: 50px repeat(6, 1fr);
+    }
+
+    .timetable-header-cell {
+        font-size: 0.65rem;
+        padding: 6px 2px;
+    }
+
+    .timetable-subject {
+        font-size: 0.6rem;
+    }
+
+    /* Insights */
+    .chart-container {
+        overflow-x: auto;
+    }
+
+    /* Checkin */
+    .checkin-mood {
+        gap: 8px;
+    }
+
+    .mood-btn {
+        width: 42px;
+        height: 42px;
+        font-size: 1.2rem;
     }
 }
+
+@media (max-width: 480px) {
+    .page-content {
+        padding: 12px;
+    }
+
+    .mobile-header {
+        padding: 8px 12px;
+    }
+
+    /* Onboarding full mobile */
+    .onboarding-options {
+        grid-template-columns: 1fr;
+    }
+
+    .onboarding-left {
+        padding: 16px;
+        min-height: 20vh;
+    }
+
+    .onboarding-right {
+        padding: 16px;
+    }
+
+    /* Stats single column */
+    .stats-row {
+        grid-template-columns: 1fr;
+    }
+
+    /* Focus music grid */
+    .focus-music-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .focus-music-panel {
+        padding: 16px;
+    }
+
+    /* Pomodoro */
+    .pomodoro-custom {
+        grid-template-columns: 1fr;
+    }
+
+    /* Today blocks */
+    .block-item {
+        padding: 10px;
+    }
+
+    /* Timetable */
+    .timetable-tabs {
+        padding: 12px 16px 0;
+    }
+
+    .timetable-tab {
+        padding: 6px 10px;
+        font-size: 0.7rem;
+    }
+}
+
 
 /* ═══════════ Auth Page ═══════════ */
 

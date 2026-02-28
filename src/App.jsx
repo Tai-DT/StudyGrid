@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { CalendarDays, Bot, Plus } from 'lucide-react';
+import { CalendarDays, Bot, Plus, Menu } from 'lucide-react';
 import './index.css';
 import {
     loadData, saveData, getDefaultData,
@@ -57,6 +57,7 @@ export default function App() {
     const [showAIChat, setShowAIChat] = useState(false);
     const [showPomodoro, setShowPomodoro] = useState(false);
     const [dataLoaded, setDataLoaded] = useState(false);
+    const [sidebarOpen, setSidebarOpen] = useState(false);
 
     // ─── Auth listener ────────────────────────────────────
     useEffect(() => {
@@ -407,7 +408,21 @@ export default function App() {
                 onOpenPomodoro={() => setShowPomodoro(true)}
                 onSignOut={handleSignOut}
                 onOpenAI={() => setShowAIChat(true)}
+                isOpen={sidebarOpen}
+                onClose={() => setSidebarOpen(false)}
             />
+
+            {/* Mobile Header */}
+            <header className="mobile-header">
+                <button className="mobile-menu-btn" onClick={() => setSidebarOpen(true)}>
+                    <Menu size={22} />
+                </button>
+                <div className="mobile-header-title">
+                    <CalendarDays size={20} strokeWidth={1.8} />
+                    <span>StudyGrid</span>
+                </div>
+                <div style={{ width: 40 }} />
+            </header>
 
             <main className="main-content">
                 <div className="page-content">

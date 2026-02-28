@@ -1,10 +1,49 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Sun, Crosshair, Flame, Scale, TrendingUp, Inbox, Lock, Check, AlertTriangle, Sunrise } from 'lucide-react';
 import { CATEGORIES, calculateBalance } from '../store';
 
 export default function TodayView({ blocks, tasks, goals, onStartFocus, onToggleTask }) {
     const [checkedPriorities, setCheckedPriorities] = useState([]);
     const [mood, setMood] = useState(null);
+    const notifiedRef = useRef(new Set());
+
+    // Request notification permission on mount
+    useEffect(() => {
+        if ('Notification' in window && Notification.permission === 'default') {
+            Notification.requestPermission();
+        }
+    }, []);
+
+    // Check for upcoming blocks every 60s and send notifications
+    useEffect(() => {
+        const checkUpcoming = () => {
+            if (!('Notification' in window) || Notification.permission !== 'granted') return;
+
+            const now = new Date();
+            const dayIdx = now.getDay() === 0 ? 6 : now.getDay() - 1;
+            const nowMinutes = now.getHours() * 60 + now.getMinutes();
+
+            blocks.filter(b => b.day === dayIdx).forEach(block => {
+                const blockStart = block.startHour * 60 + block.startMin;
+                const diff = blockStart - nowMinutes;
+                const blockId = `${block.id}-${now.toDateString()}`;
+
+                // Notify 5 minutes before
+                if (diff > 0 && diff <= 5 && !notifiedRef.current.has(blockId)) {
+                    notifiedRef.current.add(blockId);
+                    new Notification('📅 StudyGrid — Sắp đến giờ!', {
+                        body: `${block.title} bắt đầu lúc ${String(block.startHour).padStart(2, '0')}:${String(block.startMin).padStart(2, '0')}`,
+                        icon: '/studygrid-icon.svg',
+                        tag: blockId,
+                    });
+                }
+            });
+        };
+
+        checkUpcoming();
+        const timer = setInterval(checkUpcoming, 60000);
+        return () => clearInterval(timer);
+    }, [blocks]);
 
     const today = new Date();
     const todayDayIdx = today.getDay() === 0 ? 6 : today.getDay() - 1;
