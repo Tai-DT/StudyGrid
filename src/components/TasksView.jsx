@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
-import { CheckSquare, ClipboardList, Clock, CircleCheck, AlertTriangle, CalendarDays, Zap, Check, Trash2, Plus, PartyPopper } from 'lucide-react';
+import { CheckSquare, ClipboardList, Clock, CircleCheck, AlertTriangle, CalendarDays, Zap, Check, Trash2, Plus, PartyPopper, Repeat2 } from 'lucide-react';
 import { CATEGORIES } from '../store';
 
 export default function TasksView({ tasks, onAddTask, onToggleTask, onScheduleTask, onDeleteTask }) {
     const [filter, setFilter] = useState('all');
     const [showAddForm, setShowAddForm] = useState(false);
-    const [newTask, setNewTask] = useState({ title: '', deadline: '', estimatedHours: 2, category: 'study' });
+    const [newTask, setNewTask] = useState({ title: '', deadline: '', estimatedHours: 2, category: 'study', repeat: 'none' });
 
     const filtered = tasks.filter(t => {
         if (filter === 'pending') return !t.completed;
@@ -41,7 +41,7 @@ export default function TasksView({ tasks, onAddTask, onToggleTask, onScheduleTa
             completed: false,
             scheduled: false,
         });
-        setNewTask({ title: '', deadline: '', estimatedHours: 2, category: 'study' });
+        setNewTask({ title: '', deadline: '', estimatedHours: 2, category: 'study', repeat: 'none' });
         setShowAddForm(false);
     };
 
@@ -155,6 +155,26 @@ export default function TasksView({ tasks, onAddTask, onToggleTask, onScheduleTa
                                 ))}
                             </div>
                         </div>
+                        <div>
+                            <label className="label">Lặp lại</label>
+                            <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap' }}>
+                                {[
+                                    { key: 'none', label: 'Không lặp' },
+                                    { key: 'daily', label: 'Hàng ngày' },
+                                    { key: 'weekly', label: 'Hàng tuần' },
+                                    { key: 'monthly', label: 'Hàng tháng' },
+                                ].map(r => (
+                                    <button
+                                        key={r.key}
+                                        className={`filter-chip ${newTask.repeat === r.key ? 'active' : ''}`}
+                                        onClick={() => setNewTask({ ...newTask, repeat: r.key })}
+                                    >
+                                        {r.key !== 'none' && <Repeat2 size={12} style={{ marginRight: 3 }} />}
+                                        {r.label}
+                                    </button>
+                                ))}
+                            </div>
+                        </div>
                         <div style={{ display: 'flex', gap: 8, justifyContent: 'flex-end' }}>
                             <button className="btn btn-ghost btn-sm" onClick={() => setShowAddForm(false)}>Huỷ</button>
                             <button className="btn btn-primary btn-sm" onClick={handleSubmit}>Thêm Task</button>
@@ -200,6 +220,11 @@ export default function TasksView({ tasks, onAddTask, onToggleTask, onScheduleTa
                                     {task.deadline && (
                                         <span className={getDeadlineClass(task.deadline)} style={{ display: 'flex', alignItems: 'center', gap: 3 }}>
                                             <CalendarDays size={11} /> {getDaysUntil(task.deadline)}
+                                        </span>
+                                    )}
+                                    {task.repeat && task.repeat !== 'none' && (
+                                        <span style={{ fontSize: '0.68rem', color: 'var(--accent)', display: 'flex', alignItems: 'center', gap: 3 }}>
+                                            <Repeat2 size={11} /> {{ daily: 'Hàng ngày', weekly: 'Hàng tuần', monthly: 'Hàng tháng' }[task.repeat]}
                                         </span>
                                     )}
                                 </div>
