@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Settings, User, School, GraduationCap, Briefcase, Zap, Bell, Clock, Link, Database, Download, Trash2, Info, Lock, LogOut } from 'lucide-react';
+import { Settings, User, School, GraduationCap, Briefcase, Zap, Bell, Clock, Database, Download, Trash2, Info, Lock, LogOut } from 'lucide-react';
 
 const LEVEL_LABELS = {
     cap1: 'Cấp 1 (Tiểu học)',
@@ -102,28 +102,7 @@ export default function SettingsView({ settings, user, onUpdateSettings, onReset
                     </div>
                 </div>
 
-                {/* Sync */}
-                <div className="settings-section">
-                    <h3><Link size={16} style={{ verticalAlign: 'middle', marginRight: 6 }} />Đồng bộ</h3>
-                    <div className="settings-row">
-                        <div>
-                            <div className="settings-row-label">Google Calendar</div>
-                            <div className="settings-row-desc">Import sự kiện từ Google Calendar</div>
-                        </div>
-                        <button className="btn btn-secondary btn-sm">
-                            <Link size={12} /> Kết nối
-                        </button>
-                    </div>
-                    <div className="settings-row">
-                        <div>
-                            <div className="settings-row-label">Apple Calendar</div>
-                            <div className="settings-row-desc">Import sự kiện từ Apple Calendar</div>
-                        </div>
-                        <button className="btn btn-secondary btn-sm">
-                            <Link size={12} /> Kết nối
-                        </button>
-                    </div>
-                </div>
+
 
                 {/* Data */}
                 <div className="settings-section">
